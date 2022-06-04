@@ -1,0 +1,220 @@
+{
+  "multipart": [
+    {
+      "when": { "facing": "up" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true }
+    },
+    {
+      "when": { "facing": "up", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true }
+    },
+    {
+      "when": { "facing": "up", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true }
+    },
+    {
+      "when": { "facing": "up", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true }
+    },
+    {
+      "when": { "facing": "up", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true }
+    },
+    {
+      "when": { "facing": "up", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "y": 180 }
+    },
+    {
+      "when": { "facing": "up", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "y": 180 }
+    },
+    {
+      "when": { "facing": "up", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "y": 180 }
+    },
+    {
+      "when": { "facing": "up", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "y": 180 }
+    },
+    {
+      "when": { "facing": "down" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true, "x": 180 }
+    },
+    {
+      "when": { "facing": "down", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 180 }
+    },
+    {
+      "when": { "facing": "down", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 180 }
+    },
+    {
+      "when": { "facing": "down", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 180 }
+    },
+    {
+      "when": { "facing": "down", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 180 }
+    },
+    {
+      "when": { "facing": "down", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 180, "y": 180 }
+    },
+    {
+      "when": { "facing": "down", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 180, "y": 180 }
+    },
+    {
+      "when": { "facing": "down", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 180, "y": 180 }
+    },
+    {
+      "when": { "facing": "down", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 180, "y": 180 }
+    },
+    {
+      "when": { "facing": "south" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true, "x": -90 }
+    },
+    {
+      "when": { "facing": "south", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": -90 }
+    },
+    {
+      "when": { "facing": "south", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": -90 }
+    },
+    {
+      "when": { "facing": "south", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": -90 }
+    },
+    {
+      "when": { "facing": "south", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": -90 }
+    },
+    {
+      "when": { "facing": "south", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 90, "y": 180 }
+    },
+    {
+      "when": { "facing": "south", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 90, "y": 180 }
+    },
+    {
+      "when": { "facing": "south", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 90, "y": 180 }
+    },
+    {
+      "when": { "facing": "south", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true, "x": -90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": -90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": -90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": -90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": -90, "y": 180 }
+    },
+    {
+      "when": { "facing": "north", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 90 }
+    },
+    {
+      "when": { "facing": "north", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 90 }
+    },
+    {
+      "when": { "facing": "north", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 90 }
+    },
+    {
+      "when": { "facing": "north", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 90 }
+    },
+    {
+      "when": { "facing": "east" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true, "x": -90, "y": -90 }
+    },
+    {
+      "when": { "facing": "east", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": -90, "y": -90 }
+    },
+    {
+      "when": { "facing": "east", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": -90, "y": -90 }
+    },
+    {
+      "when": { "facing": "east", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": -90, "y": -90 }
+    },
+    {
+      "when": { "facing": "east", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": -90, "y": -90 }
+    },
+    {
+      "when": { "facing": "east", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 90, "y": 90 }
+    },
+    {
+      "when": { "facing": "east", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 90, "y": 90 }
+    },
+    {
+      "when": { "facing": "east", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 90, "y": 90 }
+    },
+    {
+      "when": { "facing": "east", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west" },
+      "apply": { "model": "bls:block/wire_nub", "uvlock": true, "x": -90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west", "forward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": -90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west", "forward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": -90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west", "right": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": -90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west", "right": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": -90, "y": 90 }
+    },
+    {
+      "when": { "facing": "west", "backward": true },
+      "apply": { "model": "bls:block/wire_n", "uvlock": true, "x": 90, "y": -90 }
+    },
+    {
+      "when": { "facing": "west", "backward": false },
+      "apply": { "model": "bls:block/wire_nside", "uvlock": true, "x": 90, "y": -90 }
+    },
+    {
+      "when": { "facing": "west", "left": true },
+      "apply": { "model": "bls:block/wire_e", "uvlock": true, "x": 90, "y": -90 }
+    },
+    {
+      "when": { "facing": "west", "left": false },
+      "apply": { "model": "bls:block/wire_eside", "uvlock": true, "x": 90, "y": -90 }
+    }
+  ]
+}

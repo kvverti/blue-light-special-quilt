@@ -1,0 +1,25 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "#light"
+  },
+  "elements": [
+    {
+      "from": [9, 0, 7],
+      "to": [16, 2, 9],
+      "faces": {
+        "up": { "texture": "#light" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" }
+      }
+    },
+    {
+      "from": [9, 0.005, 7],
+      "to": [16, 0.005, 9],
+      "faces": {
+        "up": { "texture": "#base" },
+        "down": { "texture": "#base" }
+      }
+    }
+  ]
+}

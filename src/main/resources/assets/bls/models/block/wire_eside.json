@@ -1,0 +1,15 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "#light"
+  },
+  "elements": [
+    {
+      "from": [9, 0, 7],
+      "to": [9, 2, 9],
+      "faces": {
+        "east": { "texture": "#side" }
+      }
+    }
+  ]
+}
