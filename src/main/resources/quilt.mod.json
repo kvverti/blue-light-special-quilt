@@ -1,25 +1,26 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.example",
-		"id": "example_mod",
+		"group": "systems.thedawn",
+		"id": "bls",
 		"version": "${version}",
 		"metadata": {
-			"name": "Mod Name",
+			"name": "Blue Light Special",
 			"description": "A short description of your mod.",
+			"license": "MPL-2.0",
 			"contributors": {
-				"Me!": "Owner"
+				"kwerti": "Owner"
 			},
 			"contact": {
-				"homepage": "https://example.com/",
-				"issues": "https://github.com/QuiltMC/quilt-template-mod/issues",
-				"sources": "https://github.com/QuiltMC/quilt-template-mod"
+				"homepage": "https://github.com/kvverti/blue-light-special-quilt",
+				"issues": "https://github.com/kvverti/blue-light-special-quilt/issues",
+				"sources": "https://github.com/kvverti/blue-light-special-quilt"
 			},
-			"icon": "assets/example_mod/icon.png"
+			"icon": "assets/bls/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "com.example.example_mod.ExampleMod"
+			"init": "systems.thedawn.bls.BlueLightSpecial"
 		},
 		"depends": [
 			{
@@ -35,6 +36,5 @@
 				"versions": ">=1.18.2"
 			}
 		]
-	},
-	"mixin": "example_mod.mixins.json"
+	}
 }
