@@ -7,16 +7,24 @@
  */
 package systems.thedawn.bls.block;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -28,11 +36,12 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.tick.OrderedTick;
 
 /**
  * The base class for all blocks with wire-like connection behavior
  */
-public class WireBlockBase extends Block {
+public class WireBlockBase extends BlockWithEntity {
 	public static final Property<Direction> FACING = Properties.FACING;
 	public static final Property<Boolean> FORWARD = BooleanProperty.of("forward");
 	public static final Property<Boolean> BACKWARD = BooleanProperty.of("backward");
@@ -132,7 +141,7 @@ public class WireBlockBase extends Block {
 		for(int i = 0; i < connectionDirs.length; i++) {
 			var adjacentState = world.getBlockState(pos.offset(connectionDirs[i]));
 			// todo replace with interface
-			if(adjacentState.getBlock() instanceof WireBlockBase && adjacentState.get(FACING) == facing) {
+			if(canConnectTo(state, adjacentState)) {
 				state = state.with(CONNECTIONS.get(i), true);
 			}
 		}
@@ -143,22 +152,74 @@ public class WireBlockBase extends Block {
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		super.onPlaced(world, pos, state, placer, itemStack);
+		if(world.isClient()) {
+			return;
+		}
+
+		// initialize block entity state
+		var node = NetworkNodeBlockEntity.TYPE.get(world, pos);
+		if(node != null) {
+			for(var dir : connectionDirs(state)) {
+				node.startDiscovery(dir);
+			}
+		}
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		var relativeConnectionDir = toRelative(state.get(FACING), direction);
 		if(!relativeConnectionDir.getAxis().isHorizontal()) {
 			return state;
 		}
-		// todo replace with interface
-		var connected = neighborState.getBlock() instanceof WireBlockBase &&
-			neighborState.get(FACING) == state.get(FACING) &&
+		var connected = canConnectTo(state, neighborState) &&
 			neighborState.get(toProperty(relativeConnectionDir.getOpposite()));
 		return state.with(toProperty(relativeConnectionDir), connected);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
+	public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+		super.neighborUpdate(state, world, pos, block, fromPos, notify);
+		if(world.isClient()) {
+			return;
+		}
+
+		// speculatively queue discovery in the direction that changed
+		var blockEntity = NetworkNodeBlockEntity.TYPE.get(world, pos);
+		if(blockEntity != null) {
+			var updateDir = Direction.fromVector(fromPos.subtract(pos));
+			if(updateDir != null) {
+				blockEntity.queueDiscovery(updateDir);
+			}
+		}
+
+		// second part of the update requires current state
+		world.getBlockTickScheduler().scheduleTick(OrderedTick.create(BlsBlocks.WIRE, pos));
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+		var blockEntity = NetworkNodeBlockEntity.TYPE.get(world, pos);
+		if(blockEntity == null) {
+			return;
+		}
+
+		if(!shouldHaveBlockEntity(state)) {
+			// remove BE since we're no longer a node
+			blockEntity.notifyConnectionsBeforeRemove(connectionDirs(state));
+			world.removeBlockEntity(pos);
+		} else if(blockEntity.isEmpty()) {
+			// start discovery for all directions
+			for(var dir : connectionDirs(state)) {
+				blockEntity.startDiscovery(dir);
+			}
+		}
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		var facing = state.get(FACING);
 		var shape = BASE_OUTLINE_SHAPES[facing.getId()];
@@ -169,6 +230,74 @@ public class WireBlockBase extends Block {
 			}
 		}
 		return shape;
+	}
+
+	@Nullable
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		if(shouldHaveBlockEntity(state)) {
+			return new NetworkNodeBlockEntity(pos, state);
+		}
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		var ticker = checkType(type, NetworkNodeBlockEntity.TYPE, NetworkNodeBlockEntity::tick);
+		return shouldHaveBlockEntity(state) ? ticker : null;
+	}
+
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
+	}
+
+	/**
+	 * Whether the block state should store a block entity.
+	 */
+	public static boolean shouldHaveBlockEntity(BlockState state) {
+		// block states with one, three, or four connections store data
+		int connections = 0;
+		for(var prop : CONNECTIONS) {
+			if(state.get(prop)) {
+				connections++;
+			}
+		}
+		return connections != 0 && connections != 2;
+	}
+
+	/**
+	 * Computes the (absolute) directions in which the given state is connected.
+	 */
+	public static EnumSet<Direction> connectionDirs(BlockState state) {
+		var dirs = EnumSet.noneOf(Direction.class);
+		var facing = state.get(FACING);
+		for(var dir : relativeHorizontal(facing)) {
+			if(hasConnectionInAbsolute(state, dir)) {
+				dirs.add(dir);
+			}
+		}
+		return dirs;
+	}
+
+	/**
+	 * Whether this state can possibly connect to another state.
+	 *
+	 * @param state This state.
+	 * @param other The other state.
+	 */
+	public static boolean canConnectTo(BlockState state, BlockState other) {
+		// todo replace with interface
+		return other.getBlock() instanceof WireBlockBase && other.get(FACING) == state.get(FACING);
+	}
+
+	public static boolean hasConnectionInAbsolute(BlockState state, Direction absolute) {
+		var facing = state.get(FACING);
+		if(facing.getAxis() == absolute.getAxis()) {
+			return false;
+		}
+		return state.get(toProperty(toRelative(facing, absolute)));
 	}
 
 	private static Direction toAbsolute(Direction facing, Direction relative) {

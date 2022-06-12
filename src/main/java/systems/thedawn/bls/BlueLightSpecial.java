@@ -12,6 +12,7 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import systems.thedawn.bls.block.BlsBlocks;
+import systems.thedawn.bls.item.BlsItems;
 
 import net.minecraft.util.Identifier;
 
@@ -24,6 +25,7 @@ public class BlueLightSpecial implements ModInitializer {
 	public void onInitialize(ModContainer mod) {
 		modId = mod.metadata().id();
 		BlsBlocks.init();
+		BlsItems.init();
 	}
 
 	public static Identifier id(String path) {
